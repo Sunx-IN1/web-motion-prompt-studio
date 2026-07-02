@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" role="img" aria-label="Animated blue glass butterfly">
+  <defs>
+    <radialGradient id="wingFill" cx="52%" cy="48%" r="64%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity=".92"/>
+      <stop offset="22%" stop-color="#59edff" stop-opacity=".72"/>
+      <stop offset="64%" stop-color="#1678ff" stop-opacity=".32"/>
+      <stop offset="100%" stop-color="#051c80" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="line" x1="0" x2="1">
+      <stop offset="0%" stop-color="#bdf9ff" stop-opacity=".1"/>
+      <stop offset="48%" stop-color="#59eaff" stop-opacity=".9"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity=".22"/>
+    </linearGradient>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="7" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <style>
+      .left {
+        transform-box: fill-box;
+        transform-origin: right center;
+        animation: flap-left 1.9s ease-in-out infinite;
+      }
+      .right {
+        transform-box: fill-box;
+        transform-origin: left center;
+        animation: flap-right 1.9s ease-in-out infinite;
+      }
+      .spark {
+        animation: spark 1.7s ease-in-out infinite;
+      }
+      .spark:nth-of-type(2n) {
+        animation-delay: -.45s;
+      }
+      .spark:nth-of-type(3n) {
+        animation-delay: -.9s;
+      }
+      @keyframes flap-left {
+        0%, 100% { transform: perspective(900px) rotateY(8deg) rotateZ(-1deg); opacity: .72; }
+        50% { transform: perspective(900px) rotateY(54deg) rotateZ(4deg) scaleX(.86); opacity: 1; }
+      }
+      @keyframes flap-right {
+        0%, 100% { transform: perspective(900px) rotateY(-8deg) rotateZ(1deg); opacity: .72; }
+        50% { transform: perspective(900px) rotateY(-54deg) rotateZ(-4deg) scaleX(.86); opacity: 1; }
+      }
+      @keyframes spark {
+        0%, 100% { opacity: .28; transform: scale(.82); }
+        50% { opacity: 1; transform: scale(1.24); }
+      }
+    </style>
+  </defs>
+  <g filter="url(#glow)">
+    <g class="left">
+      <path d="M600 370 C500 72 225 8 82 126 C-26 216 30 448 198 540 C328 612 492 548 600 405 Z" fill="url(#wingFill)" stroke="#80efff" stroke-width="7"/>
+      <path d="M588 412 C450 404 302 468 198 584 C118 676 238 738 372 660 C500 586 572 486 600 420 Z" fill="url(#wingFill)" stroke="#5beaff" stroke-width="5" opacity=".8"/>
+      <path d="M590 368 L150 138 M586 376 L286 76 M592 388 L92 356 M592 410 L218 548 M456 224 L116 350 M444 508 L304 662 M520 306 L230 224 M518 450 L236 486" fill="none" stroke="url(#line)" stroke-width="5" opacity=".84"/>
+      <path d="M166 138 L286 76 L456 224 L590 368 L518 450 L304 662 L218 548 L92 356 Z" fill="none" stroke="#58e7ff" stroke-width="2.2" opacity=".4"/>
+      <circle class="spark" cx="286" cy="76" r="11" fill="#fff"/>
+      <circle class="spark" cx="456" cy="224" r="8" fill="#70f0ff"/>
+      <circle class="spark" cx="166" cy="138" r="7" fill="#70f0ff"/>
+      <circle class="spark" cx="92" cy="356" r="6" fill="#fff"/>
+      <circle class="spark" cx="304" cy="662" r="8" fill="#70f0ff"/>
+    </g>
+    <g class="right">
+      <path d="M600 370 C700 72 975 8 1118 126 C1226 216 1170 448 1002 540 C872 612 708 548 600 405 Z" fill="url(#wingFill)" stroke="#80efff" stroke-width="7"/>
+      <path d="M612 412 C750 404 898 468 1002 584 C1082 676 962 738 828 660 C700 586 628 486 600 420 Z" fill="url(#wingFill)" stroke="#5beaff" stroke-width="5" opacity=".8"/>
+      <path d="M610 368 L1050 138 M614 376 L914 76 M608 388 L1108 356 M608 410 L982 548 M744 224 L1084 350 M756 508 L896 662 M680 306 L970 224 M682 450 L964 486" fill="none" stroke="url(#line)" stroke-width="5" opacity=".84"/>
+      <path d="M1034 138 L914 76 L744 224 L610 368 L682 450 L896 662 L982 548 L1108 356 Z" fill="none" stroke="#58e7ff" stroke-width="2.2" opacity=".4"/>
+      <circle class="spark" cx="914" cy="76" r="11" fill="#fff"/>
+      <circle class="spark" cx="744" cy="224" r="8" fill="#70f0ff"/>
+      <circle class="spark" cx="1034" cy="138" r="7" fill="#70f0ff"/>
+      <circle class="spark" cx="1108" cy="356" r="6" fill="#fff"/>
+      <circle class="spark" cx="896" cy="662" r="8" fill="#70f0ff"/>
+    </g>
+    <path d="M600 274 C572 360 573 508 600 682 C628 508 628 360 600 274 Z" fill="#e9ffff" stroke="#75efff" stroke-width="5"/>
+    <path d="M580 288 C484 178 382 182 312 226 M620 288 C716 178 818 182 888 226" fill="none" stroke="#c7fbff" stroke-width="5" stroke-linecap="round"/>
+    <circle class="spark" cx="600" cy="380" r="18" fill="#fff"/>
+  </g>
+</svg>

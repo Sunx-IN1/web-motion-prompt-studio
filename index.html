@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>孙欣然 - AI训练师个人网站</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      cursor: none;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'PingFang SC', 'Microsoft YaHei', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #0a0e17;
+      color: #ffffff;
+      overflow-x: hidden;
+    }
+
+    .custom-cursor {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      width: 80px;
+      height: 80px;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s ease-out;
+      mix-blend-mode: screen;
+    }
+
+    .custom-cursor img {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 0 15px rgba(100, 181, 246, 0.8)) drop-shadow(0 0 30px rgba(100, 181, 246, 0.4));
+      animation: cursorGlow 2s ease-in-out infinite;
+    }
+
+    @keyframes cursorGlow {
+      0%, 100% {
+        filter: drop-shadow(0 0 15px rgba(100, 181, 246, 0.8)) drop-shadow(0 0 30px rgba(100, 181, 246, 0.4));
+      }
+      50% {
+        filter: drop-shadow(0 0 25px rgba(100, 181, 246, 1)) drop-shadow(0 0 50px rgba(100, 181, 246, 0.6)) drop-shadow(0 0 80px rgba(139, 92, 246, 0.3));
+      }
+    }
+
+    .particle {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9998;
+      width: 3px;
+      height: 3px;
+      background: radial-gradient(circle, rgba(100, 181, 246, 0.9) 0%, rgba(139, 92, 246, 0.5) 50%, rgba(255, 255, 255, 0.3) 100%);
+      border-radius: 50%;
+      box-shadow: 0 0 8px rgba(100, 181, 246, 0.8), 0 0 15px rgba(139, 92, 246, 0.4), 0 0 25px rgba(255, 255, 255, 0.2);
+      animation: particleFade 1.2s ease-out forwards;
+    }
+
+    @keyframes particleFade {
+      0% {
+        opacity: 1;
+        transform: scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(0);
+      }
+    }
+
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(10, 14, 23, 0.85);
+      backdrop-filter: blur(20px);
+      padding: 12px 60px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(100, 181, 246, 0.1);
+    }
+
+    .topbar .brand {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .topbar nav {
+      display: flex;
+      gap: 32px;
+    }
+
+    .topbar nav a {
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: color 0.3s ease;
+    }
+
+    .topbar nav a:hover {
+      color: #fff;
+    }
+
+    .topbar .profile-btn {
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      padding: 8px 20px;
+      border-radius: 20px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .hero {
+      min-height: 100vh;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: flex-start;
+      padding: 60px;
+      overflow: hidden;
+    }
+
+    .hero__video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+      opacity: 0.9;
+      filter: brightness(1.1);
+    }
+
+    .hero__overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(10, 14, 23, 0.4) 0%, rgba(10, 14, 23, 0.2) 50%, rgba(10, 14, 23, 0.4) 100%);
+      z-index: 1;
+    }
+
+    .hero__fog {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(ellipse at 20% 30%, rgba(100, 181, 246, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 70%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .hero__bottom-curtain {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 20%;
+      height: 8%;
+      background: rgba(10, 14, 23, 1);
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .hero__content {
+      position: relative;
+      z-index: 3;
+      max-width: 600px;
+      animation: fadeInUp 1s ease-out;
+    }
+
+    .hero__title {
+      font-size: 4rem;
+      font-weight: 900;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #60a5fa, #fff, #c084fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 0 80px rgba(100, 181, 246, 0.4);
+    }
+
+    .hero__subtitle {
+      font-size: 1.15rem;
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 30px;
+    }
+
+    .hero__scroll {
+      position: absolute;
+      bottom: 40px;
+      left: 60px;
+      z-index: 3;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    .hero__scroll svg {
+      width: 20px;
+      height: 30px;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(10px);
+      }
+    }
+
+    .section {
+      min-height: 100vh;
+      padding: 100px 60px;
+      position: relative;
+      background: #0a0e17;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .stagger-item {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .stagger-item.animate {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .section__bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.15;
+      z-index: 0;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .section__content {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section__title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #60a5fa, #c084fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .section__subtitle {
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.6);
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 30px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 30px;
+    }
+
+    .card {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(100, 181, 246, 0.3);
+      border-radius: 12px;
+      padding: 20px;
+      backdrop-filter: blur(10px);
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .card:hover {
+      transform: translateY(-8px) rotateX(5deg) rotateY(-5deg);
+      border-color: rgba(100, 181, 246, 0.6);
+      box-shadow: 0 30px 80px rgba(59, 130, 246, 0.25), 0 0 40px rgba(100, 181, 246, 0.15);
+      background: rgba(30, 41, 59, 0.8);
+    }
+
+    .skill-card {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(100, 181, 246, 0.2);
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .skill-card:hover {
+      transform: translateY(-8px) rotateX(5deg) rotateY(-5deg) scale(1.02);
+      border-color: rgba(100, 181, 246, 0.6);
+      box-shadow: 0 30px 80px rgba(59, 130, 246, 0.25), 0 0 40px rgba(100, 181, 246, 0.15);
+      background: rgba(30, 41, 59, 0.9);
+    }
+
+    .card__icon {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+
+    .card__title {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #60a5fa;
+    }
+
+    .card__description {
+      font-size: 0.8rem;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .skill-card {
+      background: rgba(30, 41, 59, 0.4);
+      border: 1px solid rgba(100, 181, 246, 0.15);
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .skill-card:hover {
+      border-color: rgba(100, 181, 246, 0.4);
+      background: rgba(30, 41, 59, 0.6);
+    }
+
+    .skill-card__title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #60a5fa;
+      margin-bottom: 8px;
+    }
+
+    .skill-card__description {
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .workflow-track {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .workflow-track::before {
+      content: '';
+      position: absolute;
+      top: 40px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+      z-index: 0;
+    }
+
+    .workflow-node {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 20px 10px;
+    }
+
+    .workflow-node__dot {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: #0a0e17;
+      border: 3px solid #3b82f6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 1.2rem;
+      color: #60a5fa;
+      margin-bottom: 15px;
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+    }
+
+    .workflow-node__title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .workflow-node__description {
+      font-size: 0.8rem;
+      line-height: 1.5;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .article-card {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(100, 181, 246, 0.2);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .article-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(100, 181, 246, 0.5);
+    }
+
+    .article-card__visual {
+      height: 180px;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .article-card__visual::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.2), transparent 50%);
+    }
+
+    .article-card__body {
+      padding: 24px;
+    }
+
+    .article-card__title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .article-card__description {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 15px;
+    }
+
+    .article-card__tag {
+      display: inline-block;
+      padding: 5px 15px;
+      background: rgba(59, 130, 246, 0.15);
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #60a5fa;
+    }
+
+    .creator-card {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(100, 181, 246, 0.2);
+      border-radius: 16px;
+      padding: 30px 20px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .creator-card:hover {
+      border-color: rgba(100, 181, 246, 0.5);
+    }
+
+    .creator-card__avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      margin: 0 auto 20px;
+      border: 3px solid rgba(100, 181, 246, 0.3);
+    }
+
+    .creator-card__name {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .creator-card__description {
+      font-size: 0.85rem;
+      line-height: 1.5;
+      color: rgba(255, 255, 255, 0.5);
+      margin-bottom: 20px;
+    }
+
+    .creator-card__link {
+      display: inline-block;
+      padding: 8px 24px;
+      background: rgba(59, 130, 246, 0.15);
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #60a5fa;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .creator-card__link:hover {
+      background: rgba(59, 130, 246, 0.3);
+    }
+
+    .ai-tool-card {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(100, 181, 246, 0.3);
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .ai-tool-card:hover {
+      border-color: rgba(100, 181, 246, 0.5);
+    }
+
+    .ai-tool-card__title {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #60a5fa;
+    }
+
+    .ai-tool-card__description {
+      font-size: 0.8rem;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 10px;
+    }
+
+    .ai-tool-card__cta {
+      display: inline-flex;
+      align-items: center;
+      padding: 10px 24px;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #fff;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .ai-tool-card__cta:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+    }
+
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .contact-copy {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(100, 181, 246, 0.2);
+      border-radius: 16px;
+      padding: 40px;
+    }
+
+    .contact-copy h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .contact-copy p {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 30px;
+    }
+
+    .contact-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .contact-tags span {
+      padding: 8px 20px;
+      background: rgba(59, 130, 246, 0.15);
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #60a5fa;
+    }
+
+    .contact-form {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(100, 181, 246, 0.2);
+      border-radius: 16px;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%;
+      padding: 15px 20px;
+      border: 1px solid rgba(100, 181, 246, 0.2);
+      border-radius: 10px;
+      background: rgba(10, 14, 23, 0.5);
+      color: #fff;
+      font-family: inherit;
+      font-size: 0.95rem;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+      border-color: #60a5fa;
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
+    }
+
+    .contact-form textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .contact-form button {
+      padding: 15px 40px;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: none;
+      transition: all 0.3s ease;
+    }
+
+    .contact-form button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+    }
+
+    .footer {
+      padding: 40px 60px;
+      text-align: center;
+      border-top: 1px solid rgba(100, 181, 246, 0.1);
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 0.85rem;
+      background: #0a0e17;
+    }
+
+    @media (max-width: 1024px) {
+      .grid-4 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .custom-cursor {
+        display: none;
+      }
+
+      .topbar {
+        padding: 12px 20px;
+      }
+
+      .topbar nav {
+        display: none;
+      }
+
+      .hero {
+        padding: 0 20px;
+      }
+
+      .hero__title {
+        font-size: 2.5rem;
+      }
+
+      .section {
+        padding: 80px 20px;
+      }
+
+      .grid-2,
+      .grid-3,
+      .grid-4 {
+        grid-template-columns: 1fr;
+      }
+
+      .workflow-track {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .workflow-track::before {
+        display: none;
+      }
+
+      .contact-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="custom-cursor" id="cursor">
+    <img src="assets/blue-butterfly-motion.svg" alt="蝴蝶光标">
+  </div>
+
+  <header class="topbar">
+    <div class="brand">孙欣然</div>
+    <nav>
+      <a href="#about">关于我</a>
+      <a href="#workflow">工作流</a>
+      <a href="#tools">小工具</a>
+      <a href="#notes">笔记与文章</a>
+      <a href="#creators">推荐博主</a>
+      <a href="#ai-tools">推荐AI工具</a>
+      <a href="#contact">联系</a>
+    </nav>
+    <a href="#" class="profile-btn">个人网站</a>
+  </header>
+
+  <section id="top" class="hero">
+    <video class="hero__video" autoplay muted loop playsinline>
+      <source src="assets/hero-butterfly-4k-2.mp4" type="video/mp4">
+      <source src="assets/hero-butterfly-4k.mp4" type="video/mp4">
+      <source src="assets/hero-particle-video.mp4" type="video/mp4">
+      <source src="assets/hero-particle-video-clear.mp4" type="video/mp4">
+    </video>
+    <div class="hero__overlay"></div>
+    <div class="hero__fog"></div>
+    <div class="hero__bottom-curtain"></div>
+    
+    <div class="hero__content">
+      <h1 class="hero__title stagger-item">WELCOME</h1>
+      <p class="hero__subtitle stagger-item">
+        这里是我和 AI 一起学习、实验和创造的地方。<br>
+        我会把 Prompt 调优、工作流设计、小工具想法和课堂笔记慢慢整理在这里。
+      </p>
+    </div>
+
+    <div class="hero__scroll stagger-item">
+      <span>向下滑动</span>
+      <svg viewBox="0 0 24 36" fill="none">
+        <path d="M12 30L12 6M12 6L6 12M12 6L18 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </section>
+
+  <section id="about" class="section scroll-animation">
+    <div class="section__bg" style="background-image: url('assets/module-bg-02-about.png');"></div>
+    <div class="section__content" style="display: flex; gap: 40px; align-items: flex-start;">
+      <div style="flex: 2;">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 30px; color: #fff; margin-left: -20px;">个人属性能力</h2>
+        
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+          <div class="stagger-item" style="background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(100, 181, 246, 0.3); border-radius: 12px; padding: 20px; position: relative;">
+            <span style="position: absolute; top: -8px; right: 15px; width: 16px; height: 16px; background: #3b82f6; border-radius: 50%; border: 2px solid #0a0e17;"></span>
+            <h3 style="font-size: 1rem; font-weight: 700; color: #60a5fa; margin-bottom: 8px;">Prompt 调优</h3>
+            <p style="font-size: 0.8rem; line-height: 1.6; color: rgba(255, 255, 255, 0.7);">精通系统提示词设计与迭代优化，通过结构化指令引导模型精准理解任务意图，持续提升输出质量与一致性。</p>
+          </div>
+          
+          <div class="stagger-item" style="background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(100, 181, 246, 0.3); border-radius: 12px; padding: 20px; position: relative;">
+            <span style="position: absolute; top: -8px; right: 15px; width: 16px; height: 16px; background: #3b82f6; border-radius: 50%; border: 2px solid #0a0e17;"></span>
+            <h3 style="font-size: 1rem; font-weight: 700; color: #60a5fa; margin-bottom: 8px;">模型评测</h3>
+            <p style="font-size: 0.8rem; line-height: 1.6; color: rgba(255, 255, 255, 0.7);">熟练运用 MT-Bench、HumanEval 等主流基准进行多维度模型能力评估，结合自动化评测与人工评审定位模型短板。</p>
+          </div>
+          
+          <div class="stagger-item" style="background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(100, 181, 246, 0.3); border-radius: 12px; padding: 20px; position: relative;">
+            <span style="position: absolute; top: -8px; right: 15px; width: 16px; height: 16px; background: #3b82f6; border-radius: 50%; border: 2px solid #0a0e17;"></span>
+            <h3 style="font-size: 1rem; font-weight: 700; color: #60a5fa; margin-bottom: 8px;">SFT 监督微调</h3>
+            <p style="font-size: 0.8rem; line-height: 1.6; color: rgba(255, 255, 255, 0.7);">基于高质量标注数据对基座模型进行监督微调，涵盖指令遵循、格式规范及领域适配，使模型稳定输出符合业务预期的响应。</p>
+          </div>
+          
+          <div class="stagger-item" style="background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(100, 181, 246, 0.3); border-radius: 12px; padding: 20px; position: relative;">
+            <span style="position: absolute; top: -8px; right: 15px; width: 16px; height: 16px; background: #3b82f6; border-radius: 50%; border: 2px solid #0a0e17;"></span>
+            <h3 style="font-size: 1rem; font-weight: 700; color: #60a5fa; margin-bottom: 8px;">RLHF 强化学习</h3>
+            <p style="font-size: 0.8rem; line-height: 1.6; color: rgba(255, 255, 255, 0.7);">通过构建人类偏好排序数据训练奖励模型，结合 PPO 等策略优化算法对齐模型输出与人类价值观，显著提升安全性与有用性。</p>
+          </div>
+          
+          <div class="stagger-item" style="background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(100, 181, 246, 0.3); border-radius: 12px; padding: 20px; position: relative;">
+            <span style="position: absolute; top: -8px; right: 15px; width: 16px; height: 16px; background: #3b82f6; border-radius: 50%; border: 2px solid #0a0e17;"></span>
+            <h3 style="font-size: 1rem; font-weight: 700; color: #60a5fa; margin-bottom: 8px;">Workflow 提效</h3>
+            <p style="font-size: 0.8rem; line-height: 1.6; color: rgba(255, 255, 255, 0.7);">设计并优化 AI 训练全流程 Pipeline，涵盖数据采集、标注、训练、评测与部署环节，通过自动化工具链提升团队协作效率与交付速度。</p>
+          </div>
+          
+          <div class="stagger-item" style="background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(100, 181, 246, 0.3); border-radius: 12px; padding: 20px; position: relative;">
+            <span style="position: absolute; top: -8px; right: 15px; width: 16px; height: 16px; background: #3b82f6; border-radius: 50%; border: 2px solid #0a0e17;"></span>
+            <h3 style="font-size: 1rem; font-weight: 700; color: #60a5fa; margin-bottom: 8px;">高质量数据构建</h3>
+            <p style="font-size: 0.8rem; line-height: 1.6; color: rgba(255, 255, 255, 0.7);">系统化构建高质量训练数据集，包括人工撰写、规模化构建、多维度采样与严格质量过滤，确保数据的准确性、覆盖度与分布均衡。</p>
+          </div>
+          
+          <div class="stagger-item" style="background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(100, 181, 246, 0.3); border-radius: 12px; padding: 20px; position: relative;">
+            <span style="position: absolute; top: -8px; right: 15px; width: 16px; height: 16px; background: #3b82f6; border-radius: 50%; border: 2px solid #0a0e17;"></span>
+            <h3 style="font-size: 1rem; font-weight: 700; color: #60a5fa; margin-bottom: 8px;">边界 Case 优化</h3>
+            <p style="font-size: 0.8rem; line-height: 1.6; color: rgba(255, 255, 255, 0.7);">识别并攻克模型在极端输入、长尾场景下的失败案例，通过针对性数据补充与策略调整持续压缩模型能力盲区。</p>
+          </div>
+          
+          <div class="stagger-item" style="background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(100, 181, 246, 0.3); border-radius: 12px; padding: 20px; position: relative;">
+            <span style="position: absolute; top: -8px; right: 15px; width: 16px; height: 16px; background: #3b82f6; border-radius: 50%; border: 2px solid #0a0e17;"></span>
+            <h3 style="font-size: 1rem; font-weight: 700; color: #60a5fa; margin-bottom: 8px;">高质量内容输出</h3>
+            <p style="font-size: 0.8rem; line-height: 1.6; color: rgba(255, 255, 255, 0.7);">制定输出质量标准与评审体系，运用 Few-shot、思维链等技术引导模型生成逻辑清晰、事实准确、格式规范的高质量内容。</p>
+          </div>
+          
+          <div class="stagger-item" style="background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(100, 181, 246, 0.3); border-radius: 12px; padding: 20px; position: relative;">
+            <span style="position: absolute; top: -8px; right: 15px; width: 16px; height: 16px; background: #3b82f6; border-radius: 50%; border: 2px solid #0a0e17;"></span>
+            <h3 style="font-size: 1rem; font-weight: 700; color: #60a5fa; margin-bottom: 8px;">项目优化复盘</h3>
+            <p style="font-size: 0.8rem; line-height: 1.6; color: rgba(255, 255, 255, 0.7);">建立训练效果追踪与迭代复盘机制，系统性分析每次模型版本的增量与回归，沉淀最佳实践并驱动下一轮优化方向。</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="stagger-item" style="flex: 1; display: flex; align-items: center; min-height: 600px;">
+        <div style="background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(100, 181, 246, 0.3); border-radius: 16px; padding: 40px; width: 100%;">
+          <p style="font-size: 0.85rem; font-weight: 600; color: #60a5fa; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px;">ABOUT ME & MY WEBSITE</p>
+          <h3 style="font-size: 1.8rem; font-weight: 800; margin-bottom: 20px;">这个网站是干什么的</h3>
+          <p style="font-size: 0.95rem; line-height: 1.8; color: rgba(255, 255, 255, 0.7);">一名 AI 训练师的后花园，有我个人探索的 Prompt 小工具，有我个人的 Workflow 工作流程，同时这个网站记录了我的学习资料，实践笔记，工具推荐以及喜欢的博主。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="workflow" class="section scroll-animation">
+    <div class="section__bg" style="background-image: url('assets/module-bg-03-workflow.png');"></div>
+    <div class="section__content">
+      <h2 class="section__title">工作流</h2>
+      <p class="section__subtitle">从需求分析到成品交付，完整的 AI 训练工作流程</p>
+      
+      <div class="workflow-track">
+        <article class="workflow-node stagger-item">
+          <span class="workflow-node__dot">01</span>
+          <h3 class="workflow-node__title">需求对接</h3>
+          <p class="workflow-node__description">梳理使用场景、明确模型/视频产出目标、划定输出标准</p>
+        </article>
+        <article class="workflow-node stagger-item">
+          <span class="workflow-node__dot">02</span>
+          <h3 class="workflow-node__title">数据处理标注</h3>
+          <p class="workflow-node__description">数据集清洗、分类标注、制定统一标注规范</p>
+        </article>
+        <article class="workflow-node stagger-item">
+          <span class="workflow-node__dot">03</span>
+          <h3 class="workflow-node__title">Prompt 工程搭建</h3>
+          <p class="workflow-node__description">编写结构化提示词、增加反例约束、多版本对比调试</p>
+        </article>
+        <article class="workflow-node stagger-item">
+          <span class="workflow-node__dot">04</span>
+          <h3 class="workflow-node__title">模型训练微调</h3>
+          <p class="workflow-node__description">基础模型微调、参数调试、小批量样本测试</p>
+        </article>
+        <article class="workflow-node stagger-item">
+          <span class="workflow-node__dot">05</span>
+          <h3 class="workflow-node__title">多维度评测迭代</h3>
+          <p class="workflow-node__description">效果打分、缺陷记录、反向优化 Prompt 与数据集</p>
+        </article>
+        <article class="workflow-node stagger-item">
+          <span class="workflow-node__dot">06</span>
+          <h3 class="workflow-node__title">成品交付归档</h3>
+          <p class="workflow-node__description">整理可复用工具、全套笔记、标准化工作模板</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="tools" class="section scroll-animation">
+    <div class="section__bg" style="background-image: url('assets/module-bg-04-tools.png');"></div>
+    <div class="section__content">
+      <h2 class="section__title">小工具</h2>
+      <p class="section__subtitle">面向 AI 训练和影视制作打造的轻量化工具</p>
+      
+      <div class="grid-2">
+        <article class="card stagger-item">
+          <div class="card__icon">🛠️</div>
+          <h3 class="card__title">自研 AI 辅助工具 1</h3>
+          <p class="card__description">面向 AI 训练/影视制作打造轻量化工具，简化重复操作，内置预设 Prompt、自动化数据处理功能，降低实操门槛</p>
+          <div style="display: flex; gap: 12px; margin-top: 20px;">
+            <a href="#contact" style="padding: 8px 20px; background: transparent; border: 1px solid rgba(100, 181, 246, 0.3); border-radius: 20px; color: #fff; text-decoration: none; font-size: 0.85rem;">使用教程</a>
+            <a href="#contact" style="padding: 8px 20px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); border-radius: 20px; color: #fff; text-decoration: none; font-size: 0.85rem;">在线打开</a>
+          </div>
+        </article>
+        <article class="card stagger-item">
+          <div class="card__icon">⚡</div>
+          <h3 class="card__title">自研 AI 辅助工具 2</h3>
+          <p class="card__description">面向 AI 训练/影视制作打造轻量化工具，简化重复操作，内置预设 Prompt、自动化数据处理功能，降低实操门槛</p>
+          <div style="display: flex; gap: 12px; margin-top: 20px;">
+            <a href="#contact" style="padding: 8px 20px; background: transparent; border: 1px solid rgba(100, 181, 246, 0.3); border-radius: 20px; color: #fff; text-decoration: none; font-size: 0.85rem;">使用教程</a>
+            <a href="#contact" style="padding: 8px 20px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); border-radius: 20px; color: #fff; text-decoration: none; font-size: 0.85rem;">在线打开</a>
+          </div>
+        </article>
+        <article class="card stagger-item">
+          <div class="card__icon">🎯</div>
+          <h3 class="card__title">自研 AI 辅助工具 3</h3>
+          <p class="card__description">面向 AI 训练/影视制作打造轻量化工具，简化重复操作，内置预设 Prompt、自动化数据处理功能，降低实操门槛</p>
+          <div style="display: flex; gap: 12px; margin-top: 20px;">
+            <a href="#contact" style="padding: 8px 20px; background: transparent; border: 1px solid rgba(100, 181, 246, 0.3); border-radius: 20px; color: #fff; text-decoration: none; font-size: 0.85rem;">使用教程</a>
+            <a href="#contact" style="padding: 8px 20px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); border-radius: 20px; color: #fff; text-decoration: none; font-size: 0.85rem;">在线打开</a>
+          </div>
+        </article>
+        <article class="card stagger-item">
+          <div class="card__icon">💡</div>
+          <h3 class="card__title">自研 AI 辅助工具 4</h3>
+          <p class="card__description">面向 AI 训练/影视制作打造轻量化工具，简化重复操作，内置预设 Prompt、自动化数据处理功能，降低实操门槛</p>
+          <div style="display: flex; gap: 12px; margin-top: 20px;">
+            <a href="#contact" style="padding: 8px 20px; background: transparent; border: 1px solid rgba(100, 181, 246, 0.3); border-radius: 20px; color: #fff; text-decoration: none; font-size: 0.85rem;">使用教程</a>
+            <a href="#contact" style="padding: 8px 20px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); border-radius: 20px; color: #fff; text-decoration: none; font-size: 0.85rem;">在线打开</a>
+          </div>
+        </article>
+        <article class="card stagger-item">
+          <div class="card__icon">🔧</div>
+          <h3 class="card__title">自研 AI 辅助工具 5</h3>
+          <p class="card__description">面向 AI 训练/影视制作打造轻量化工具，简化重复操作，内置预设 Prompt、自动化数据处理功能，降低实操门槛</p>
+          <div style="display: flex; gap: 12px; margin-top: 20px;">
+            <a href="#contact" style="padding: 8px 20px; background: transparent; border: 1px solid rgba(100, 181, 246, 0.3); border-radius: 20px; color: #fff; text-decoration: none; font-size: 0.85rem;">使用教程</a>
+            <a href="#contact" style="padding: 8px 20px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); border-radius: 20px; color: #fff; text-decoration: none; font-size: 0.85rem;">在线打开</a>
+          </div>
+        </article>
+        <article class="card stagger-item">
+          <div class="card__icon">✨</div>
+          <h3 class="card__title">自研 AI 辅助工具 6</h3>
+          <p class="card__description">面向 AI 训练/影视制作打造轻量化工具，简化重复操作，内置预设 Prompt、自动化数据处理功能，降低实操门槛</p>
+          <div style="display: flex; gap: 12px; margin-top: 20px;">
+            <a href="#contact" style="padding: 8px 20px; background: transparent; border: 1px solid rgba(100, 181, 246, 0.3); border-radius: 20px; color: #fff; text-decoration: none; font-size: 0.85rem;">使用教程</a>
+            <a href="#contact" style="padding: 8px 20px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); border-radius: 20px; color: #fff; text-decoration: none; font-size: 0.85rem;">在线打开</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="notes" class="section scroll-animation">
+    <div class="section__bg" style="background-image: url('assets/module-bg-05-notes.png');"></div>
+    <div class="section__content">
+      <h2 class="section__title">笔记与文章</h2>
+      <p class="section__subtitle">记录我的学习心得和实践经验</p>
+      
+      <div class="grid-3">
+        <article class="article-card stagger-item">
+          <div class="article-card__visual"></div>
+          <div class="article-card__body">
+            <h3 class="article-card__title">Prompt 结构化教程</h3>
+            <p class="article-card__description">拆解提示词分层逻辑，分享大量可直接复制的反例约束模板</p>
+            <span class="article-card__tag">Prompt 技巧</span>
+          </div>
+        </article>
+        <article class="article-card stagger-item">
+          <div class="article-card__visual"></div>
+          <div class="article-card__body">
+            <h3 class="article-card__title">大模型评测避坑</h3>
+            <p class="article-card__description">实操评测过程常见缺陷，标准化打分维度整理笔记</p>
+            <span class="article-card__tag">模型测评</span>
+          </div>
+        </article>
+        <article class="article-card stagger-item">
+          <div class="article-card__visual"></div>
+          <div class="article-card__body">
+            <h3 class="article-card__title">AI 短视频镜头</h3>
+            <p class="article-card__description">AI 影视画面参数调试、镜头连贯优化实操经验</p>
+            <span class="article-card__tag">AI 影视教程</span>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="creators" class="section scroll-animation">
+    <div class="section__bg" style="background-image: url('assets/module-bg-06-creators.png');"></div>
+    <div class="section__content">
+      <h2 class="section__title">推荐博主</h2>
+      <p class="section__subtitle">深耕大模型训练领域，持续输出高质量内容的博主</p>
+      
+      <div class="grid-4">
+        <article class="creator-card stagger-item">
+          <span class="creator-card__avatar"></span>
+          <h3 class="creator-card__name">Prompt调优笔记</h3>
+          <p class="creator-card__description">深耕大模型训练领域，持续输出Prompt调优、数据集制作、模型评测干货内容，适合AI训练从业者学习</p>
+          <a class="creator-card__link" href="#contact">查看主页</a>
+        </article>
+        <article class="creator-card stagger-item">
+          <span class="creator-card__avatar"></span>
+          <h3 class="creator-card__name">大模型训练观察</h3>
+          <p class="creator-card__description">深耕大模型训练领域，持续输出Prompt调优、数据集制作、模型评测干货内容，适合AI训练从业者学习</p>
+          <a class="creator-card__link" href="#contact">查看主页</a>
+        </article>
+        <article class="creator-card stagger-item">
+          <span class="creator-card__avatar"></span>
+          <h3 class="creator-card__name">数据标注方法库</h3>
+          <p class="creator-card__description">深耕大模型训练领域，持续输出Prompt调优、数据集制作、模型评测干货内容，适合AI训练从业者学习</p>
+          <a class="creator-card__link" href="#contact">查看主页</a>
+        </article>
+        <article class="creator-card stagger-item">
+          <span class="creator-card__avatar"></span>
+          <h3 class="creator-card__name">模型评测手册</h3>
+          <p class="creator-card__description">深耕大模型训练领域，持续输出Prompt调优、数据集制作、模型评测干货内容，适合AI训练从业者学习</p>
+          <a class="creator-card__link" href="#contact">查看主页</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="ai-tools" class="section scroll-animation">
+    <div class="section__bg" style="background-image: url('assets/module-bg-07-ai-tools.png');"></div>
+    <div class="section__content">
+      <h2 class="section__title">推荐AI工具</h2>
+      <p class="section__subtitle">精选实用的 AI 训练相关工具</p>
+      
+      <div class="grid-2">
+        <article class="ai-tool-card stagger-item">
+          <h3 class="ai-tool-card__title">大语言模型工作台</h3>
+          <p class="ai-tool-card__description">适用场景：AI训练数据处理、Prompt调优、大模型评测、数据集标注</p>
+          <p class="ai-tool-card__description">简介：轻量化适配训练工作，内置训练专用功能，提升AI训练整体效率</p>
+          <a class="ai-tool-card__cta" href="#contact">前往使用</a>
+        </article>
+        <article class="ai-tool-card stagger-item">
+          <h3 class="ai-tool-card__title">数据标注平台</h3>
+          <p class="ai-tool-card__description">适用场景：AI训练数据处理、Prompt调优、大模型评测、数据集标注</p>
+          <p class="ai-tool-card__description">简介：轻量化适配训练工作，内置训练专用功能，提升AI训练整体效率</p>
+          <a class="ai-tool-card__cta" href="#contact">前往使用</a>
+        </article>
+        <article class="ai-tool-card stagger-item">
+          <h3 class="ai-tool-card__title">Prompt调试工具</h3>
+          <p class="ai-tool-card__description">适用场景：AI训练数据处理、Prompt调优、大模型评测、数据集标注</p>
+          <p class="ai-tool-card__description">简介：轻量化适配训练工作，内置训练专用功能，提升AI训练整体效率</p>
+          <a class="ai-tool-card__cta" href="#contact">前往使用</a>
+        </article>
+        <article class="ai-tool-card stagger-item">
+          <h3 class="ai-tool-card__title">模型微调平台</h3>
+          <p class="ai-tool-card__description">适用场景：AI训练数据处理、Prompt调优、大模型评测、数据集标注</p>
+          <p class="ai-tool-card__description">简介：轻量化适配训练工作，内置训练专用功能，提升AI训练整体效率</p>
+          <a class="ai-tool-card__cta" href="#contact">前往使用</a>
+        </article>
+        <article class="ai-tool-card stagger-item">
+          <h3 class="ai-tool-card__title">训练数据处理器</h3>
+          <p class="ai-tool-card__description">适用场景：AI训练数据处理、Prompt调优、大模型评测、数据集标注</p>
+          <p class="ai-tool-card__description">简介：轻量化适配训练工作，内置训练专用功能，提升AI训练整体效率</p>
+          <a class="ai-tool-card__cta" href="#contact">前往使用</a>
+        </article>
+        <article class="ai-tool-card stagger-item">
+          <h3 class="ai-tool-card__title">模型评测记录器</h3>
+          <p class="ai-tool-card__description">适用场景：AI训练数据处理、Prompt调优、大模型评测、数据集标注</p>
+          <p class="ai-tool-card__description">简介：轻量化适配训练工作，内置训练专用功能，提升AI训练整体效率</p>
+          <a class="ai-tool-card__cta" href="#contact">前往使用</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="section scroll-animation">
+    <div class="section__bg" style="background-image: url('assets/module-bg-08-contact.png');"></div>
+    <div class="section__content">
+      <h2 class="section__title">联系</h2>
+      <p class="section__subtitle">欢迎交流与合作</p>
+      
+      <div class="contact-layout">
+        <div class="contact-copy stagger-item">
+          <h3>交流与合作</h3>
+          <p>欢迎各位AI训练同行交流Prompt、模型微调、数据集标注相关问题；可洽谈AI训练相关合作项目。</p>
+          <div class="contact-tags">
+            <span>微信</span>
+            <span>技术交流社群</span>
+            <span>邮箱</span>
+          </div>
+        </div>
+        <form class="contact-form stagger-item">
+          <input type="text" placeholder="姓名" />
+          <input type="email" placeholder="邮箱" />
+          <textarea placeholder="留言内容"></textarea>
+          <button type="submit">提交留言</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>© 2024 孙欣然 | AI训练师个人网站</p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const cursor = document.getElementById('cursor');
+      let particles = [];
+
+      document.addEventListener('mousemove', (e) => {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
+
+        for (let i = 0; i < 5; i++) {
+          const particle = document.createElement('div');
+          particle.classList.add('particle');
+          const offsetX = (Math.random() - 0.5) * 30;
+          const offsetY = (Math.random() - 0.5) * 30;
+          particle.style.left = (e.clientX + offsetX) + 'px';
+          particle.style.top = (e.clientY + offsetY) + 'px';
+          particle.style.width = (Math.random() * 5 + 2) + 'px';
+          particle.style.height = particle.style.width;
+          particle.style.animationDuration = (Math.random() * 0.8 + 0.6) + 's';
+          const colors = ['rgba(100, 181, 246, 0.9)', 'rgba(139, 92, 246, 0.9)', 'rgba(255, 255, 255, 0.8)', 'rgba(200, 200, 255, 0.7)'];
+          const color = colors[Math.floor(Math.random() * colors.length)];
+          particle.style.background = `radial-gradient(circle, ${color} 0%, transparent 100%)`;
+          
+          document.body.appendChild(particle);
+          particles.push(particle);
+
+          setTimeout(() => {
+            particle.remove();
+            particles = particles.filter(p => p !== particle);
+          }, 1500);
+        }
+      });
+
+      const contactForm = document.querySelector('.contact-form');
+      if (contactForm) {
+        contactForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          alert('留言已提交！感谢您的联系。');
+          contactForm.reset();
+        });
+      }
+
+      const navLinks = document.querySelectorAll('nav a');
+      navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const targetId = link.getAttribute('href');
+          const targetSection = document.querySelector(targetId);
+          if (targetSection) {
+            targetSection.scrollIntoView({ behavior: 'smooth' });
+          }
+        });
+      });
+
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const items = entry.target.querySelectorAll('.stagger-item');
+            items.forEach((item, index) => {
+              setTimeout(() => {
+                item.classList.add('animate');
+              }, index * 120);
+            });
+          }
+        });
+      }, observerOptions);
+
+      document.querySelectorAll('.section').forEach(section => {
+        observer.observe(section);
+      });
+
+      const heroItems = document.querySelectorAll('.hero .stagger-item');
+      heroItems.forEach((item, index) => {
+        setTimeout(() => {
+          item.classList.add('animate');
+        }, index * 150 + 500);
+      });
+
+      const skillCardContainers = document.querySelectorAll('[style*="grid-template-columns: repeat(3, 1fr)"]');
+      skillCardContainers.forEach(container => {
+        const cards = container.querySelectorAll('div[style*="background: rgba(30, 41, 59, 0.6)"]');
+        cards.forEach(card => {
+          card.addEventListener('mouseenter', () => {
+            cards.forEach(other => {
+              if (other !== card) {
+                other.style.opacity = '0.3';
+                other.style.transform = 'scale(0.95)';
+              }
+            });
+          });
+
+          card.addEventListener('mouseleave', () => {
+            cards.forEach(other => {
+              other.style.opacity = '1';
+              other.style.transform = 'scale(1)';
+            });
+          });
+        });
+      });
+    });
+  </script>
+</body>
+</html>

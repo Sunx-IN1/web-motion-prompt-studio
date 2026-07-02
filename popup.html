@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Web Motion Prompt Studio</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Web Motion Prompt Studio</p>
+          <h1>网站画面与动效提示词</h1>
+        </div>
+        <button id="analyzeBtn" class="primary">分析当前页</button>
+      </header>
+
+      <section id="status" class="status">打开目标网页后点击分析。</section>
+
+      <section class="grid">
+        <article class="panel">
+          <div class="panelHead">
+            <h2>页面摘要</h2>
+            <div class="actionsMini">
+              <button id="downloadScreenshotBtn" class="ghost" disabled>下载截图</button>
+              <button id="downloadJsonBtn" class="ghost" disabled>下载 JSON</button>
+            </div>
+          </div>
+          <dl id="summary" class="summary"></dl>
+          <div id="screenshotStrip" class="screenshotStrip" aria-label="分段网页截图预览"></div>
+        </article>
+
+        <article class="panel">
+          <div class="panelHead">
+            <h2>提示词</h2>
+            <button id="copyBtn" class="ghost" disabled>复制</button>
+          </div>
+          <textarea id="promptOutput" spellcheck="false" placeholder="分析完成后会显示提示词。"></textarea>
+        </article>
+      </section>
+    </main>
+    <script src="popup.js"></script>
+  </body>
+</html>
